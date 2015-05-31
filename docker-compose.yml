@@ -1,0 +1,21 @@
+fluentd:
+  build: ./fluentd 
+  ports:
+    - 24224:24224
+  volumes_from:
+    - datastore
+  volumes:
+    - ./fluentd/td-agent.conf:/etc/td-agent/td-agent.conf
+
+elasticsearch:
+  build: ./elasticsearch
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+  links:
+    - fluentd
+
+datastore:
+  build: ./datastore
+  volumes:
+    - /var/log
