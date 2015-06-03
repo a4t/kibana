@@ -6,16 +6,25 @@ fluentd:
     - datastore
   volumes:
     - ./fluentd/td-agent.conf:/etc/td-agent/td-agent.conf
+  links:
+    - elasticsearch
 
 elasticsearch:
   build: ./elasticsearch
   ports:
     - "9200:9200"
     - "9300:9300"
+
+kibana:
+  build: ./kibana
   links:
-    - fluentd
+    - elasticsearch
+  volumes:
+    - ./kibana/kibana.yml:/kibana-4.0.2-linux-x64/config/kibana.yml
+  ports:
+    - "5601:5601"
 
 datastore:
   build: ./datastore
   volumes:
-    - /var/log
+    - /tmp
