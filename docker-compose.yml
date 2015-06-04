@@ -1,3 +1,12 @@
+nginx:
+  build: ./nginx
+  volumes_from:
+    - datastore  
+  volumes:
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  ports:
+    - "80:80"
+
 fluentd:
   build: ./fluentd 
   ports:
@@ -13,7 +22,6 @@ elasticsearch:
   build: ./elasticsearch
   ports:
     - "9200:9200"
-    - "9300:9300"
 
 kibana:
   build: ./kibana
@@ -27,4 +35,5 @@ kibana:
 datastore:
   build: ./datastore
   volumes:
-    - /tmp
+    - /var/log/nginx
+  command: mkdir /var/log/nginx
